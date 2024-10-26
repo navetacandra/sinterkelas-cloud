@@ -1,4 +1,3 @@
-const { spawnSync } = require('child_process');
 const path = require('path');
 const express = require('express');
 const { existsSync, createReadStream } = require('fs');
@@ -6,9 +5,9 @@ const compression = require('compression');
 const { createHash } = require('crypto');
 
 // build-ui.js
-;(() => {
+;(async () => {
   if(process.env.BUILD_UI == 'true') {
-    spawnSync('node', [path.resolve(path.join(__dirname, 'build-ui.js'))]);
+    await import(path.resolve(path.join(__dirname, 'build-ui.js')))
   }
 })();
 
