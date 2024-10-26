@@ -1,0 +1,24 @@
+{
+  "name": "sinterkelas-cloud",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navetacandra/sinterkelas-cloud.git"
+  },
+  "author": "navetacandra <naveta.cand@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/navetacandra/sinterkelas-cloud/issues"
+  },
+  "homepage": "https://github.com/navetacandra/sinterkelas-cloud#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.1",
+    "pg": "^8.13.1"
+  }
+}
