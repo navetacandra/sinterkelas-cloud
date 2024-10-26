@@ -4,6 +4,7 @@ const { existsSync, createReadStream } = require('fs');
 const compression = require('compression');
 const { createHash } = require('crypto');
 const { Client } = require('pg');
+const cookieParser = require('cookie-parser');
 
 // build-ui.js
 ;(async () => {
@@ -19,6 +20,7 @@ const pgConn = new Client({
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
 });
 
 // Connect to PostgreSQL
@@ -33,6 +35,7 @@ pgConn.connect()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(compression({ level: 9, filter: () => true }));
 
 // Function for handle file cache
