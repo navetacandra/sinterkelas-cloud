@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ui-build": "node ./src/build-ui.js",
+    "start": "node ./src/index.js",
+    "start.build": "BUILD_UI=true node ./src/index.js"
   },
   "repository": {
     "type": "git",
