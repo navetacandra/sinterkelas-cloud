@@ -3,6 +3,7 @@ const express = require('express');
 const { existsSync, createReadStream } = require('fs');
 const compression = require('compression');
 const { createHash } = require('crypto');
+const { Client } = require('pg');
 
 // build-ui.js
 ;(async () => {
@@ -13,6 +14,22 @@ const { createHash } = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const pgConn = new Client({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
+
+// Connect to PostgreSQL
+pgConn.connect()
+  .then(_ => {
+    console.log('Connected to PostgreSQL');
+  })
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  })
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +56,12 @@ function handleFileCache(req, res, filepath) {
   });
 }
 
+function loadPostgresClient(req, _, next) {
+  req.pgConn = pgConn;
+  next();
+}
+
+app.use('/api/', loadPostgresClient, require('./api/router').router);
 app.get('/*', (req, res) => {
   // Get request path
   let filepath = req.path.slice(1);
