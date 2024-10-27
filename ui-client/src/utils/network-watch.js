@@ -7,17 +7,16 @@ export default function networkWatch() {
     navigator.connection.onchange = () => {
       if (!navigator.onLine) {
         // Use a custom alert component or a toast notification library here
-        alert('Network connection lost!');
+        alert("Network connection lost!");
       }
     };
   } else {
     // Fallback for older browsers
-    window.addEventListener('online', () => {
-      console.log('Network connection restored!');
+    window.addEventListener("online", () => {
+      console.log("Network connection restored!");
     });
-    window.addEventListener('offline', () => {
-      alert('Network connection lost!');
+    window.addEventListener("offline", () => {
+      alert("Network connection lost!");
     });
   }
 }
-

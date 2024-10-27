@@ -5,7 +5,7 @@
  * @param {string} theme - The new theme to apply.
  */
 export function updateTheme(theme) {
-  document.querySelector('html').className = theme;
+  document.querySelector("html").className = theme;
 }
 
 /**
@@ -15,9 +15,9 @@ export function updateTheme(theme) {
 export async function initTheme() {
   /** @type {import('./db').default} */
   const database = window.db;
-  const storedTheme = await database.getData('preferences', 'theme');
+  const storedTheme = await database.getData("preferences", "theme");
   if (!storedTheme) {
-    await database.addData('preferences', { key: 'theme', value: 'light' });
+    await database.addData("preferences", { key: "theme", value: "light" });
   }
   updateTheme(storedTheme?.value);
 }
@@ -28,7 +28,7 @@ export async function initTheme() {
  */
 export function onThemeSetListener(event) {
   const { storeName, data } = event;
-  if (storeName === 'preferences' && data.key === 'theme') {
+  if (storeName === "preferences" && data.key === "theme") {
     updateTheme(data.value);
   }
 }
@@ -39,8 +39,7 @@ export function onThemeSetListener(event) {
  */
 export function onThemeUpdateListener(event) {
   const { storeName, id, newData } = event;
-  if (storeName === 'preferences' && id === 'theme') {
+  if (storeName === "preferences" && id === "theme") {
     updateTheme(newData.value);
   }
 }
-

@@ -7,15 +7,15 @@
 export function request(path, options) {
   return new Promise(async (resolve, reject) => {
     if (!navigator.onLine) {
-      reject({ status: 'error', message: 'Network connection error!' });
+      reject({ status: "error", message: "Network connection error!" });
       return;
     }
 
-    const token = await window.db.getData('user', 'token');
-    const headers = {...options.headers };
+    const token = await window.db.getData("user", "token");
+    const headers = { ...options.headers };
 
     if (token) {
-      headers['x-access-token'] = token.value;
+      headers["x-access-token"] = token.value;
     }
 
     try {
@@ -26,8 +26,7 @@ export function request(path, options) {
         resolve(response);
       }
     } catch (error) {
-      reject({ status: 'error', message: error.message });
+      reject({ status: "error", message: error.message });
     }
   });
 }
-

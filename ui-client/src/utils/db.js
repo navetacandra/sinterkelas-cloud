@@ -65,7 +65,7 @@ class Database extends EventEmitter {
         });
       };
 
-     request.onsuccess = (event) => {
+      request.onsuccess = (event) => {
         this.db = event.target.result;
         resolve(this.db);
       };
@@ -83,7 +83,7 @@ class Database extends EventEmitter {
    * @returns {Promise}
    */
   addData(storeName, data) {
-    if (!storeName ||!data) {
+    if (!storeName || !data) {
       throw new Error("Store name and data are required");
     }
 
@@ -92,18 +92,28 @@ class Database extends EventEmitter {
       const store = transaction.objectStore(storeName);
       const storeConfig = this.stores.find((s) => s.name === storeName);
 
-      if (storeConfig &&!storeConfig.autoIncrement && storeConfig.keyPath && data[storeConfig.keyPath] == null) {
-        reject(`Error: Missing required key '${storeConfig.keyPath}' for non-auto-increment store '${storeName}'.`);
+      if (
+        storeConfig &&
+        !storeConfig.autoIncrement &&
+        storeConfig.keyPath &&
+        data[storeConfig.keyPath] == null
+      ) {
+        reject(
+          `Error: Missing required key '${storeConfig.keyPath}' for non-auto-increment store '${storeName}'.`,
+        );
         return;
       }
 
-      const request = storeConfig.autoIncrement? store.add(data) : store.put(data);
+      const request = storeConfig.autoIncrement
+        ? store.add(data)
+        : store.put(data);
 
       request.onsuccess = () => {
         this.emit("add", { storeName, data });
         resolve(`Data added successfully to ${storeName}`);
       };
-      request.onerror = (event) => reject(`Error adding data to ${storeName}: ${event.target.error}`);
+      request.onerror = (event) =>
+        reject(`Error adding data to ${storeName}: ${event.target.error}`);
     });
   }
 
@@ -114,7 +124,7 @@ class Database extends EventEmitter {
    * @returns {Promise}
    */
   getData(storeName, id) {
-    if (!storeName ||!id) {
+    if (!storeName || !id) {
       throw new Error("Store name and ID are required");
     }
 
@@ -124,7 +134,8 @@ class Database extends EventEmitter {
       const request = store.get(id);
 
       request.onsuccess = () => resolve(request.result);
-      request.onerror = (event) => reject(`Error reading data from ${storeName}: ${event.target.error}`);
+      request.onerror = (event) =>
+        reject(`Error reading data from ${storeName}: ${event.target.error}`);
     });
   }
 
@@ -136,7 +147,7 @@ class Database extends EventEmitter {
    * @returns {Promise}
    */
   updateData(storeName, id, newData) {
-    if (!storeName ||!id ||!newData) {
+    if (!storeName || !id || !newData) {
       throw new Error("Store name, ID, and new data are required");
     }
 
@@ -154,10 +165,14 @@ class Database extends EventEmitter {
           this.emit("update", { storeName, id, newData });
           resolve(`Data updated successfully in ${storeName}`);
         };
-        updateRequest.onerror = (event) => reject(`Error updating data in ${storeName}: ${event.target.error}`);
+        updateRequest.onerror = (event) =>
+          reject(`Error updating data in ${storeName}: ${event.target.error}`);
       };
 
-      request.onerror = (event) => reject(`Error retrieving data for update in ${storeName}: ${event.target.error}`);
+      request.onerror = (event) =>
+        reject(
+          `Error retrieving data for update in ${storeName}: ${event.target.error}`,
+        );
     });
   }
 
@@ -168,7 +183,7 @@ class Database extends EventEmitter {
    * @returns {Promise}
    */
   deleteData(storeName, id) {
-    if (!storeName ||!id) {
+    if (!storeName || !id) {
       throw new Error("Store name and ID are required");
     }
 
@@ -181,7 +196,8 @@ class Database extends EventEmitter {
         this.emit("delete", { storeName, id });
         resolve(`Data deleted successfully from ${storeName}`);
       };
-      request.onerror = (event) => reject(`Error deleting data from ${storeName}: ${event.target.error}`);
+      request.onerror = (event) =>
+        reject(`Error deleting data from ${storeName}: ${event.target.error}`);
     });
   }
 
@@ -204,7 +220,8 @@ class Database extends EventEmitter {
         this.emit("clear", { storeName });
         resolve(`All data cleared from ${storeName}`);
       };
-      request.onerror = (event) => reject(`Error clearing data from ${storeName}: ${event.target.error}`);
+      request.onerror = (event) =>
+        reject(`Error clearing data from ${storeName}: ${event.target.error}`);
     });
   }
 
@@ -229,8 +246,7 @@ class Database extends EventEmitter {
 const db = new Database("sinterkelas", [
   { name: "user", keyPath: "key", autoIncrement: false },
   { name: "items" },
-  { name: "preferences", keyPath: "key", autoIncrement: false }
+  { name: "preferences", keyPath: "key", autoIncrement: false },
 ]);
 
 export default db;
-

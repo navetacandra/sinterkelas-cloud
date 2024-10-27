@@ -4,9 +4,13 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "prepare": "husky install",
     "ui-build": "node ./src/build-ui.js",
     "start": "node ./src/index.js",
     "start.build": "BUILD_UI=true node ./src/index.js"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,svelte,json,css,html,svg,md}": "prettier --write"
   },
   "repository": {
     "type": "git",
@@ -24,5 +28,10 @@
     "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
     "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
   }
 }

@@ -6,7 +6,7 @@ import { request } from "./request";
  */
 async function fetchUserData() {
   try {
-    const response = await request('/api/me', { method: 'POST' });
+    const response = await request("/api/me", { method: "POST" });
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.message);
@@ -23,13 +23,13 @@ async function fetchUserData() {
  */
 async function getUserData() {
   /** @type {import('./db').default} */
-  const database = window.db; 
+  const database = window.db;
   try {
-    const token = await database.getData('user', 'token');
+    const token = await database.getData("user", "token");
     if (!token) return null;
-    
+
     const userData = await fetchUserData();
-    await database.addData('user', { key: 'data', value: userData });
+    await database.addData("user", { key: "data", value: userData });
     return userData;
   } catch (error) {
     console.error(error);
@@ -43,9 +43,9 @@ async function getUserData() {
  */
 export async function getCurrentUser() {
   /** @type {import('./db').default} */
-  const database = window.db; 
+  const database = window.db;
   try {
-    const user = await database.getData('user', 'data');
+    const user = await database.getData("user", "data");
     if (!user) {
       return await getUserData();
     }
@@ -61,7 +61,7 @@ export async function getCurrentUser() {
  * @param {Object} event - Event object
  */
 export async function listenForUserLogin(event) {
-  if (event.storeName === 'user' && event.data?.key === 'token') {
+  if (event.storeName === "user" && event.data?.key === "token") {
     await getUserData();
   }
 }
@@ -77,12 +77,12 @@ export function login({ username, password }) {
   /** @type {import('./db').default} */
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await request('/api/login', {
-        method: 'POST',
+      const response = await request("/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
 
       const json = await response.json();
@@ -92,7 +92,7 @@ export function login({ username, password }) {
         resolve(json.data.token);
       }
     } catch (error) {
-      reject(error.message?? error.toString());
+      reject(error.message ?? error.toString());
     }
   });
 }
@@ -103,19 +103,19 @@ export function login({ username, password }) {
  */
 export function logout() {
   /** @type {import('./db').default} */
-  const database = window.db; 
+  const database = window.db;
   return new Promise(async (resolve, reject) => {
     try {
-      const token = await database.getData('user', 'token');
+      const token = await database.getData("user", "token");
       if (!token) return resolve();
 
-      const response = await request('/api/logout', { method: 'POST' });
+      const response = await request("/api/logout", { method: "POST" });
       if (response.ok) {
-        await database.clearStore('user');
+        await database.clearStore("user");
         resolve();
       } else {
         const error = await response.json();
-        reject(error.message || 'Something went wrong');
+        reject(error.message || "Something went wrong");
       }
     } catch (error) {
       reject(error);
