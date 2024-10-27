@@ -148,7 +148,7 @@ class Database extends EventEmitter {
 
 // Example usage
 const db = new Database("sinterkelas", [
-  { name: "user" },
+  { name: "user", keyPath: "key", autoIncrement: false },
   { name: "items" },
   { name: "preferences", keyPath: "key", autoIncrement: false }
 ]);
