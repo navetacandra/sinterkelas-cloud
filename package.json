@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "ui-build": "node ./src/build-ui.js",
     "start": "node ./src/index.js",
     "start.build": "BUILD_UI=true node ./src/index.js"
