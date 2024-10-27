@@ -1,39 +1,30 @@
-import { mount } from 'svelte'
-import './app.css'
-import App from './App.svelte'
-import Database from './db'
+// Import necessary dependencies
+import { mount } from 'svelte';
+import './app.css';
+import App from './App.svelte';
+import Database from './utils/db';
+import { initTheme, onThemeSetListener, onThemeUpdateListener } from './utils/theme';
+import { getCurrentUser, listenForUserLogin } from './utils/user';
+import networkWatch from './utils/network-watch';
 
-let app;
-const db = window.db = Database;
-const updateTheme = (theme) => document.querySelector('html').className = theme;
+// Create a reference to the Database instance
+const database = window.db = Database;
 
-if(navigator.connection) {
-  navigator.connection.onchange = () => {
-    if(!navigator.onLine) alert("Network connection lost!");
-  }
-}
-
-db.on('add', ({ storeName, data }) => {
-  if(storeName === 'preferences' && data?.key === 'theme')
-    updateTheme(data.value);
+database.on('add', (event) => {
+  onThemeSetListener(event);
+  listenForUserLogin(event);
 });
 
-db.on('update', ({ storeName, id, newData }) => {
-  if(storeName === 'preferences' && id === 'theme')
-    updateTheme(newData.value);
+database.on('update', (event) => {
+  onThemeUpdateListener(event);
 });
 
-db.openDatabase()
-  .catch(console.error)
-  .then(async _ => {
-    const theme = await db.getData('preferences', 'theme');
-    if(!theme) await db.addData('preferences', { key: 'theme', value: 'light' });
-    else updateTheme(theme.value);
+database.openDatabase()
+ .catch((error) => console.error('Error opening database:', error))
+ .then(async () => {
+    networkWatch();
+    await initTheme();
+    await getCurrentUser();
   })
-  .finally(() => {
-    app = mount(App, {
-      target: document.getElementById('app'),
-    });
-  })
+ .finally(() => mount(App, { target: document.getElementById('app') }));
 
-export default app

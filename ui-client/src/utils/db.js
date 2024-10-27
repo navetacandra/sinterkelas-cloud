@@ -1,17 +1,26 @@
-
-// EventEmitter class for basic pub-sub functionality
+/**
+ * EventEmitter class for basic pub-sub functionality
+ */
 class EventEmitter {
   constructor() {
     this.events = {};
   }
 
-  // Subscribe to an event
+  /**
+   * Subscribe to an event
+   * @param {string} event - The event name
+   * @param {function} listener - The event listener
+   */
   on(event, listener) {
     if (!this.events[event]) this.events[event] = [];
     this.events[event].push(listener);
   }
 
-  // Emit an event
+  /**
+   * Emit an event
+   * @param {string} event - The event name
+   * @param {*} data - The event data
+   */
   emit(event, data) {
     const listeners = this.events[event];
     if (listeners) {
@@ -20,8 +29,15 @@ class EventEmitter {
   }
 }
 
-// Database class extending EventEmitter for IndexedDB CRUD operations
+/**
+ * Database class extending EventEmitter for IndexedDB CRUD operations
+ */
 class Database extends EventEmitter {
+  /**
+   * Constructor
+   * @param {string} dbName - The database name
+   * @param {{name: string, keyPath?: string, autoIncrement?: boolean}[]} stores - The database stores
+   */
   constructor(dbName, stores) {
     super();
     this.dbName = dbName;
@@ -29,7 +45,10 @@ class Database extends EventEmitter {
     this.db = null;
   }
 
-  // Open and initialize the database with multiple stores
+  /**
+   * Open and initialize the database with multiple stores
+   * @returns {Promise}
+   */
   openDatabase() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
@@ -40,13 +59,13 @@ class Database extends EventEmitter {
           if (!db.objectStoreNames.contains(store.name)) {
             db.createObjectStore(store.name, {
               keyPath: store.keyPath || "id",
-              autoIncrement: store.autoIncrement || false
+              autoIncrement: store.autoIncrement || false,
             });
           }
         });
       };
 
-      request.onsuccess = (event) => {
+     request.onsuccess = (event) => {
         this.db = event.target.result;
         resolve(this.db);
       };
@@ -57,20 +76,28 @@ class Database extends EventEmitter {
     });
   }
 
-  // Add data to a specific store
+  /**
+   * Add data to a specific store
+   * @param {string} storeName - The store name
+   * @param {*} data - The data to add
+   * @returns {Promise}
+   */
   addData(storeName, data) {
+    if (!storeName ||!data) {
+      throw new Error("Store name and data are required");
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, "readwrite");
       const store = transaction.objectStore(storeName);
-      const storeConfig = this.stores.find(s => s.name === storeName);
+      const storeConfig = this.stores.find((s) => s.name === storeName);
 
-      let request;
-      if (storeConfig && !storeConfig.autoIncrement && storeConfig.keyPath && data[storeConfig.keyPath] == null) {
+      if (storeConfig &&!storeConfig.autoIncrement && storeConfig.keyPath && data[storeConfig.keyPath] == null) {
         reject(`Error: Missing required key '${storeConfig.keyPath}' for non-auto-increment store '${storeName}'.`);
         return;
       }
 
-      request = storeConfig.autoIncrement ? store.add(data) : store.put(data);
+      const request = storeConfig.autoIncrement? store.add(data) : store.put(data);
 
       request.onsuccess = () => {
         this.emit("add", { storeName, data });
@@ -80,8 +107,17 @@ class Database extends EventEmitter {
     });
   }
 
-  // Retrieve data by ID from a specific store
+  /**
+   * Retrieve data by ID from a specific store
+   * @param {string} storeName - The store name
+   * @param {*} id - The ID of the data to retrieve
+   * @returns {Promise}
+   */
   getData(storeName, id) {
+    if (!storeName ||!id) {
+      throw new Error("Store name and ID are required");
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, "readonly");
       const store = transaction.objectStore(storeName);
@@ -92,8 +128,18 @@ class Database extends EventEmitter {
     });
   }
 
-  // Update data by ID in a specific store
+  /**
+   * Update data by ID in a specific store
+   * @param {string} storeName - The store name
+   * @param {*} id - The ID of the data to update
+   * @param {*} newData - The new data to update with
+   * @returns {Promise}
+   */
   updateData(storeName, id, newData) {
+    if (!storeName ||!id ||!newData) {
+      throw new Error("Store name, ID, and new data are required");
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, "readwrite");
       const store = transaction.objectStore(storeName);
@@ -115,8 +161,17 @@ class Database extends EventEmitter {
     });
   }
 
-  // Delete data by ID from a specific store
+  /**
+   * Delete data by ID from a specific store
+   * @param {string} storeName - The store name
+   * @param {*} id - The ID of the data to delete
+   * @returns {Promise}
+   */
   deleteData(storeName, id) {
+    if (!storeName ||!id) {
+      throw new Error("Store name and ID are required");
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, "readwrite");
       const store = transaction.objectStore(storeName);
@@ -130,8 +185,16 @@ class Database extends EventEmitter {
     });
   }
 
-  // Clear all data from a specific store
+  /**
+   * Clear all data from a specific store
+   * @param {string} storeName - The store name
+   * @returns {Promise}
+   */
   clearStore(storeName) {
+    if (!storeName) {
+      throw new Error("Store name is required");
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, "readwrite");
       const store = transaction.objectStore(storeName);
@@ -142,6 +205,22 @@ class Database extends EventEmitter {
         resolve(`All data cleared from ${storeName}`);
       };
       request.onerror = (event) => reject(`Error clearing data from ${storeName}: ${event.target.error}`);
+    });
+  }
+
+  /**
+   * Close the database connection
+   * @returns {Promise}
+   */
+  close() {
+    return new Promise((resolve, reject) => {
+      if (this.db) {
+        this.db.close();
+        this.db = null;
+        resolve();
+      } else {
+        reject("Database is not open");
+      }
     });
   }
 }

@@ -1,10 +1,10 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { request } from "../request.js";
-  let loading = false;
-  let username = '';
-  let password = '';
-  let error = '';
+  import { login } from "../utils/user.js";
+  let loading = false,
+    username = '',
+    password = '',
+    error = '';
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -13,24 +13,9 @@
     error = '';
 
     try {
-      const res = await request('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username,
-          password
-        })
-      });
-
-      const json = await res.json();
-      if(!res.ok) {
-        error = json.message;
-      } else {
-        await window.db.addData('user', {key: 'token', value: json.data.token});
-        navigate('/dashboard')
-      }
+      const token = await login({username, password})
+      await window.db.addData('user', {key: 'token', value: token});
+      navigate('/dashboard')
     } catch(err) {
       error = err.message ?? err.toString();
     } finally {
