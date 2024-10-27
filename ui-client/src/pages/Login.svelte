@@ -1,6 +1,5 @@
 <script>
   import { navigate } from "svelte-routing";
-  while(!window.db) {}
   let loading = false;
   let username = '';
   let password = '';
@@ -34,7 +33,7 @@
   }
 </script>
 
-<section class="bg-light-background dark:bg-dark-background transition-all duration-300">
+<section>
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-[100dvh] md:h-screen lg:py-0">
     <div class="w-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 sm:max-w-md xl:p-0">
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
