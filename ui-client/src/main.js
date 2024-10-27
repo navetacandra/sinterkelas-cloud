@@ -7,6 +7,12 @@ let app;
 const db = window.db = Database;
 const updateTheme = (theme) => document.querySelector('html').className = theme;
 
+if(navigator.connection) {
+  navigator.connection.onchange = () => {
+    if(!navigator.onLine) alert("Network connection lost!");
+  }
+}
+
 db.on('add', ({ storeName, data }) => {
   if(storeName === 'preferences' && data?.key === 'theme')
     updateTheme(data.value);

@@ -8,6 +8,12 @@
   async function handleSubmit(e) {
     e.preventDefault();
     error = '';
+
+    if(!navigator.onLine) {
+      error = 'Network unreachable!';
+      return;
+    }
+
     try {
       const res = await fetch('/api/login', {
         method: 'POST',

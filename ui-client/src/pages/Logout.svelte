@@ -7,6 +7,10 @@
     if(!token) return navigate('/login');
 
     try {
+      if(!navigator.onLine) {
+        alert('Network unreachable!');
+        return;
+      }
       const res = await fetch('/api/logout', {
         method: 'POST',
         headers: {
