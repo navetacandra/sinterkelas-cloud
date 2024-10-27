@@ -46,7 +46,9 @@ function generateSW() {
   const svelteApp = readFileSync(path.join(uiClientPath, 'src', 'App.svelte'), 'utf8');
   const pathRegisterated = svelteApp.match(/path="(.*)"/g);
   if(pathRegisterated) {
-    const paths = pathRegisterated.map(p => p.replace(/path="(.*)"/, '$1'));
+    const paths = pathRegisterated
+      .filter(p => p.indexOf(':') > -1 || p.indexOf('*') > -1)
+      .map(p => p.replace(/path="(.*)"/, '$1'));
     items.push(...paths);
   }
 

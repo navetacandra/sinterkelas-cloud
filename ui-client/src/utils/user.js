@@ -11,7 +11,7 @@ async function fetchUserData() {
     if (!response.ok) {
       throw new Error(data.message);
     }
-    return data;
+    return data.data;
   } catch (error) {
     throw error;
   }
@@ -49,7 +49,7 @@ export async function getCurrentUser() {
     if (!user) {
       return await getUserData();
     }
-    return user;
+    return user.value;
   } catch (error) {
     console.error(error);
     return null;
