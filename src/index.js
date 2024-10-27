@@ -45,7 +45,7 @@ function handleFileCache(req, res, filepath) {
   fileStream.on('data', (chunk) => hash.update(chunk)); // Update hash
   fileStream.on('end', () => {
     const etag = hash.digest('hex'); // Get hash
-    res.setHeader('Cache-Control', 'public, max-age=86400'); // Set cache to 1 day
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Set cache to 1 year
     res.setHeader('ETag', etag); // Set hash as etag
     if(req.headers['if-none-match'] === etag) {
       res.status(304).send(); // Send 304 if etag match

@@ -63,6 +63,8 @@ function generateServiceWorker() {
   copyFileSync(path.join(__dirname, 'service-worker.template.js'), path.join(distPath, 'service-worker.js'));
   let html = readFileSync(path.join(distPath, 'index.html'), 'utf8');
   html = html.replace('</title>', '</title>\n    <script src="/service-worker.js"></script>')
+  html = html.replace(/><\/script>/g, ' defer></script>');
+  html = html.replace(/rel="stylesheet"/g, `media="print" onload="this.media='all'" rel="stylesheet"`);
   writeFileSync(path.join(distPath, 'index.html'), html);
   generateSW();
 }
