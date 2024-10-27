@@ -1,21 +1,17 @@
 <script>
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
+  import { request } from "../request.js";
 
   onMount(async () => {
     const token = await window.db.getData('user', 'token');
     if(!token) return navigate('/login');
 
     try {
-      if(!navigator.onLine) {
-        alert('Network unreachable!');
-        return;
-      }
-      const res = await fetch('/api/logout', {
+      const res = await request('/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': token.value
         },
         body: null
       });

@@ -1,5 +1,6 @@
 <script>
   import { navigate } from "svelte-routing";
+  import { request } from "../request.js";
   let loading = false;
   let username = '';
   let password = '';
@@ -7,15 +8,12 @@
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if(loading) return;
+    loading = true;
     error = '';
 
-    if(!navigator.onLine) {
-      error = 'Network unreachable!';
-      return;
-    }
-
     try {
-      const res = await fetch('/api/login', {
+      const res = await request('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -35,6 +33,8 @@
       }
     } catch(err) {
       error = err.message ?? err.toString();
+    } finally {
+      loading = false;
     }
   }
 </script>
@@ -58,7 +58,12 @@
           {#if error.length > 0}
           <small class="text-red-500">{error}</small>
           {/if}
+          {#if !loading}
           <button type="submit" class="w-full text-light-background bg-light-primary hover:bg-[#6bb9e4] active:bg-[#5aa0cc] focus:ring-4 focus:outline-none focus:ring-light-accent2 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-dark-primary dark:hover:bg-[#187de0] dark:active:bg-[#166ac2] dark:focus:ring-dark-accent2">Sign in</button>
+          {/if}
+          {#if loading}
+          <button disabled class="w-full text-light-background bg-[#6bb9e4] active:bg-[#5aa0cc] focus:ring-4 focus:outline-none focus:ring-light-accent2 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#187de0] dark:active:bg-[#166ac2] dark:focus:ring-dark-accent2">Loading...</button>
+          {/if}
           <p class="text-sm font-light text-dark-background dark:text-light-background">
               <!-- Don’t have an account yet? <a href="#" class="font-medium text-light-primary hover:underline dark:text-dark-primary">Sign up</a> -->
           </p>
