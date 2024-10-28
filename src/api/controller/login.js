@@ -1,4 +1,4 @@
-const { compareSync } = require("bcrypt");
+const { compare } = require("bcryptjs");
 const { createHash, randomBytes } = require("crypto");
 
 function generateToken(username = "", ua = "") {
@@ -15,77 +15,84 @@ exports.login = async (req, res) => {
 
   if (!username) {
     // Check if username is provided
-    return res
-      .status(400)
-      .json({
-        status: "error",
-        message: "Username is required!",
-        code: "auth/username-required",
-      });
+    return res.status(400).json({
+      status: "error",
+      message: "Username is required!",
+      code: "auth/username-required",
+    });
   }
   if (!password) {
     // Check if password is provided
-    return res
-      .status(400)
-      .json({
-        status: "error",
-        message: "Password is required!",
-        code: "auth/password-required",
-      });
+    return res.status(400).json({
+      status: "error",
+      message: "Password is required!",
+      code: "auth/password-required",
+    });
   }
-  // Check if user exists
-  const userRecords = await conn.query(
-    "SELECT * FROM users WHERE username=$1;",
-    [username],
-  );
-  if (userRecords.rowCount < 1) {
-    return res
-      .status(400)
-      .json({
+
+  try {
+    // Check if user exists
+    const userRecords = await conn.query(
+      "SELECT * FROM users WHERE username=$1;",
+      [username],
+    );
+    if (userRecords.rowCount < 1) {
+      return res.status(400).json({
         status: "error",
         message: "Wrong username or password!",
         code: "auth/invalid-credentials",
       });
-  }
+    }
 
-  // Check if password is correct
-  const user = userRecords.rows[0];
-  const isValid = compareSync(password, user.password);
-  if (!isValid) {
-    return res
-      .status(400)
-      .json({
+    // Check if password is correct
+    const user = userRecords.rows[0];
+    console.log(user);
+    console.log(password);
+    try {
+      await compare(password, user.password);
+    } catch (err) {
+      console.log(err);
+    }
+    const isValid = await compare(password, user.password);
+    if (!isValid) {
+      return res.status(400).json({
         status: "error",
         message: "Wrong username or password!",
         code: "auth/invalid-credentials",
       });
-  }
+    }
 
-  // Create session
-  const token = generateToken(username, ua);
-  const session = await conn.query(
-    `INSERT INTO sessions (user_id, token, ua) VALUES ($1, $2, $3) RETURNING *;`,
-    [user.id, token, ua],
-  );
+    // Create session
+    const token = generateToken(username, ua);
+    const session = await conn.query(
+      `INSERT INTO sessions (user_id, token, ua) VALUES ($1, $2, $3) RETURNING *;`,
+      [user.id, token, ua],
+    );
 
-  if (session.rowCount < 1) {
-    // Check if session was created
-    return res
-      .status(500)
-      .json({
+    if (session.rowCount < 1) {
+      // Check if session was created
+      return res.status(500).json({
         status: "error",
         message: "Failed to create session!",
         code: "auth/failed-to-create-session",
       });
-  }
+    }
 
-  return res // Send response
-    .status(200)
-    .cookie("token", session.rows[0].token, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: true,
-      expires: new Date(Date.now() + 3600000 * 24 * 7),
-    })
-    .json({ status: "success", data: { token: session.rows[0].token } });
+    return res // Send response
+      .status(200)
+      .cookie("token", session.rows[0].token, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+        expires: new Date(Date.now() + 3600000 * 24 * 7),
+      })
+      .json({ status: "success", data: { token: session.rows[0].token } });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Internal server error!",
+      code: "auth/internal-error",
+    });
+  }
 };
