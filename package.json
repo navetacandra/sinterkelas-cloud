@@ -27,7 +27,8 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "prettier-plugin-svelte": "^3.2.7"
   },
   "devDependencies": {
     "husky": "^9.1.6",

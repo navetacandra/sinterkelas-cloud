@@ -8,7 +8,9 @@
   import LogoutPage from "./pages/Logout.svelte";
   import DashboardPage from "./pages/Dashboard.svelte";
 
-  onMount(() => { while(!window.db) {} });
+  onMount(() => {
+    while (!window.db) {}
+  });
 </script>
 
 <Router>
@@ -23,5 +25,11 @@
   </Route>
   <Route path="/dashboard">
     <AuthShield component={DashboardPage} />
+  </Route>
+  <Route path="/drive">
+    <AuthShield component={DashboardPage} />
+  </Route>
+  <Route path="/drive/:id" let:params>
+    <DashboardPage id={params.id} />
   </Route>
 </Router>
