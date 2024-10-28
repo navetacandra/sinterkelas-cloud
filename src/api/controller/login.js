@@ -46,13 +46,6 @@ exports.login = async (req, res) => {
 
     // Check if password is correct
     const user = userRecords.rows[0];
-    console.log(user);
-    console.log(password);
-    try {
-      await compare(password, user.password);
-    } catch (err) {
-      console.log(err);
-    }
     const isValid = await compare(password, user.password);
     if (!isValid) {
       return res.status(400).json({
