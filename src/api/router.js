@@ -6,6 +6,17 @@ const { forceLogout } = require("./controller/force-logout");
 const { me } = require("./controller/me");
 const { drive } = require("./controller/drive");
 const { driveCreateDir } = require("./controller/drive_create-dir");
+const multer = require("multer");
+const path = require("path");
+const { drive_prepare_upload } = require("./controller/drive_prepare-upload");
+const { drive_upload } = require("./controller/drive_upload");
+
+const multerStorage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, path.resolve(path.join(__dirname, "..", "..", "uploads")));
+  },
+});
+const multerUpload = multer({ storage: multerStorage });
 
 exports.router = Router();
 
@@ -22,6 +33,17 @@ exports.router.post("/force-logout", authenticated, forceLogout);
 exports.router.post("/me", authenticated, me);
 exports.router.post("/drive", authenticated, drive);
 exports.router.post("/drive/create-dir", authenticated, driveCreateDir);
+exports.router.post(
+  "/drive/prepare-upload",
+  authenticated,
+  drive_prepare_upload,
+);
+exports.router.post(
+  "/drive/upload",
+  authenticated,
+  multerUpload.single("file"),
+  drive_upload,
+);
 exports.router.post("/drive/:driveId", authenticated, drive);
 
 exports.router.all("/*", (_, res) => {

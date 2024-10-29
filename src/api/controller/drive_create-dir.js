@@ -18,7 +18,7 @@ exports.driveCreateDir = async function (req, res) {
         .status(400)
         .json({ status: "error", message: "Name is required" });
     }
-    if (!name.match(/^[^\\\/\?\*\&quot;\'\&gt;\&lt;\:\|]*$/)) {
+    if (!name.match(/^[^\\\/\?\*\"\'\>\<\:\|]*$/)) {
       return res.status(400).json({ status: "error", message: "Invalid name" });
     }
     if (!isValidUUID(itemId)) {
