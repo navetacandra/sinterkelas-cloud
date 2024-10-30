@@ -6,8 +6,8 @@
 
   let auth = true;
   onMount(async () => {
-    const token = await window.db.getData('user', 'token');
-    if(!!token) navigate('/dashboard');
+    const token = await window.db.getData("user", "token");
+    if (!!token) navigate("/dashboard");
     auth = !!token;
   });
 </script>

@@ -7,7 +7,7 @@
 
   let auth = false;
   onMount(async () => {
-    const token = await window.db.getData('user', 'token');
+    const token = await window.db.getData("user", "token");
     auth = !!token;
   });
 </script>

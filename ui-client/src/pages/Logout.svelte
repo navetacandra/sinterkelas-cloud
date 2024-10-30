@@ -6,10 +6,10 @@
   onMount(async () => {
     try {
       await logout();
-      return navigate('/login');
-    } catch(error) {
+      return navigate("/login");
+    } catch (error) {
       alert(error);
-      return navigate('/dashboard');
+      return navigate("/dashboard");
     }
   });
 </script>
