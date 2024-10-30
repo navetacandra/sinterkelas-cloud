@@ -9,7 +9,6 @@
   function closeAllDropdowns() {
     document.querySelectorAll('[role="menu"]').forEach((el) => {
       el.classList.add("hidden");
-      el.classList.remove("right-[custom-offset]"); // Reset any dynamic class names if needed
       el.style.right = "0px";
     });
   }
@@ -46,15 +45,17 @@
 <div class="relative">
   <div
     on:contextmenu={itemContextMenu}
+    role="button"
+    tabindex="-1"
     to={"." || `/drive/${item.id}`}
-    class="w-full cursor-pointer py-3 bg-black rounded bg-gray-300 dark:bg-gray-700 mb-2.5 px-4 block"
+    class="w-full cursor-pointer py-3 bg-black rounded bg-gray-300 dark:bg-gray-700 mb-2.5 ps-4 pe-8 block"
   >
     <div class="flex text-black dark:text-white">
       {#if item.type === "directory"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
-          class="w-7 h-7 mr-3 text-dark-primary"
+          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-dark-primary"
           viewBox="0 0 16 16"
         >
           <path
@@ -65,7 +66,7 @@
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
-          class="w-7 h-7 mr-3 text-dark-primary"
+          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-dark-primary"
           viewBox="0 0 16 16"
         >
           <path
@@ -73,7 +74,7 @@
           />
         </svg>
       {/if}
-      <span class="text-lg">{item.name}</span>
+      <span class="text-lg line-clamp-1">{item.name}</span>
     </div>
   </div>
 
@@ -86,6 +87,7 @@
         class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black dark:text-white shadow-sm focus:ring-0 focus:ring-offset-0"
         data-dropdown-toggle={`dropdown-menu-${item.id}`}
         aria-haspopup="true"
+        aria-label="Options"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +105,7 @@
 
       <div
         id={`dropdown-menu-${item.id}`}
-        class="absolute hidden right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-gray-300 dark:bg-gray-700"
+        class="absolute hidden right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-gray-300 dark:bg-gray-700"
         role="menu"
         aria-orientation="vertical"
         tabindex="-1"
