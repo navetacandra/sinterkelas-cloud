@@ -40,14 +40,15 @@
 <div class="px-4 md:px-32 xl:px-64 py-8 mt-5 text-black dark:text-white">
   {#if !loading}
     {#if error}
-      <h1 class="text-3xl font-bold mb-2.5 text-center">Drive not found!</h1>
-      <p class="text-center text-lg">
-        Back to <a
-          href="/dashboard"
-          class="text-light-primary hover:underline dark:text-dark-primary"
-          >home</a
-        >
-      </p>
+      <div class="shadow-neo rounded-lg border-2 border-black p-6">
+        <h1 class="text-3xl font-bold mb-2.5 text-center">Drive not found!</h1>
+        <p class="text-center text-lg">
+          Back to <a
+            href="/dashboard"
+            class="text-blue-700 hover:underline dark:text-dark-primary">home</a
+          >
+        </p>
+      </div>
     {/if}
     {#if !error}
       <h1 class="text-3xl font-bold mb-2.5">Dashboard</h1>

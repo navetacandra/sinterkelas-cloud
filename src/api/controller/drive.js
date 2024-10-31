@@ -121,7 +121,10 @@ exports.buildPaths = function (path) {
       const sliced = x.slice(0, -1);
       return {
         name: x.slice(-1)[0], // Last element as name
-        path: sliced.length < 1 ? "" : sliced.reduce((a, c) => a + c, "/"), // Construct path without extra slashes
+        path:
+          sliced.length < 1
+            ? ""
+            : sliced.reduce((a, c) => a + c + (c ? "/" : ""), "/"), // Construct path without extra slashes
       };
     });
 };
@@ -140,7 +143,10 @@ exports.getDrivePathQuery = async function (conn, paths, token) {
   const queryValues = [
     token,
     ...paths
-      .map((x) => [x.name, x.path.length > 1 ? x.path + "/" : x.path])
+      .map((x) => [
+        x.name,
+        x.path.length > 1 ? x.path + (x.path.endsWith("/") ? "" : "/") : x.path,
+      ])
       .flat(),
   ];
 

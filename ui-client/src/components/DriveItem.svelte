@@ -1,5 +1,5 @@
 <script>
-  import { Link } from "svelte-routing";
+  import { navigate } from "svelte-routing";
   export let item;
 
   function getDropdownElement(id) {
@@ -10,52 +10,90 @@
     document.querySelectorAll('[role="menu"]').forEach((el) => {
       el.classList.add("hidden");
       el.style.right = "0px";
+      el.style.top = "0px";
     });
   }
 
-  function toggleDropdown({ element, status, posX }) {
+  function toggleDropdown({ element, status, posX, posY }) {
     const dropdown = getDropdownElement(item.id);
     const card = dropdown.closest(".relative");
-    const { width, left } = card.getBoundingClientRect();
+    const { width, left, top } = card.getBoundingClientRect();
     const positionX = element?.pageX || posX || 0;
+    const positionY = element?.pageY || posY || 0;
     const offsetRight = width + left - positionX;
+    const offsetTop = positionY - top;
 
     closeAllDropdowns();
+    if (status === false) return;
 
     if (dropdown) {
       dropdown.classList.toggle("hidden", status === false);
       dropdown.style.right = `${Math.max(0, offsetRight)}px`;
+      dropdown.style.top = `${offsetTop}px`;
 
       if (offsetRight >= positionX / 2) {
         const { width: menuWidth } = dropdown.getBoundingClientRect();
         dropdown.style.right = `${offsetRight - menuWidth}px`;
       }
+      getDropdownElement(item.id).focus();
     }
+  }
+
+  function handleBlur(e) {
+    if (e.relatedTarget) return;
+    closeAllDropdowns();
   }
 
   function itemContextMenu(e) {
     e.preventDefault();
-    toggleDropdown({ posX: e.pageX });
-    document
-      .querySelector(`[data-dropdown-toggle="dropdown-menu-${item.id}"]`)
-      .focus();
+    toggleDropdown({ posX: e.pageX, posY: e.pageY });
+  }
+
+  function handleMenuClick(action) {
+    closeAllDropdowns();
+    switch (action) {
+      case "open":
+        navigate(`/drive/${item.id}`);
+        break;
+      case "preview":
+        console.log(`Handle preview`);
+        break;
+      case "download":
+        console.log(`Handle download`);
+        break;
+      case "rename":
+        console.log(`Handle rename`);
+        break;
+      case "delete":
+        console.log(`Handle delete`);
+        break;
+      default:
+        break;
+    }
+  }
+
+  $: {
+    closeAllDropdowns();
   }
 </script>
 
-<div class="relative">
+<div
+  class="relative"
+  on:contextmenu={itemContextMenu}
+  on:dblclick={() => navigate(`/drive/${item.id}`)}
+  role="button"
+  tabindex="-1"
+>
   <div
-    on:contextmenu={itemContextMenu}
-    role="button"
-    tabindex="-1"
-    to={"." || `/drive/${item.id}`}
-    class="w-full cursor-pointer py-3 bg-black rounded bg-gray-300 dark:bg-gray-700 mb-2.5 ps-4 pe-8 block"
+    class="w-full cursor-pointer py-3 rounded-lg mb-2.5 ps-4 pe-8 block border-2 border-black shadow-neo-sm"
+    data-item-id={item.id}
   >
     <div class="flex text-black dark:text-white">
       {#if item.type === "directory"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
-          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-dark-primary"
+          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-black"
           viewBox="0 0 16 16"
         >
           <path
@@ -65,12 +103,13 @@
       {:else}
         <svg
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
           fill="currentColor"
-          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-dark-primary"
-          viewBox="0 0 16 16"
+          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-black"
         >
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path
-            d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2z"
+            d="M0 64C0 28.7 28.7 0 64 0L224 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zm384 64l-128 0L256 0 384 128z"
           />
         </svg>
       {/if}
@@ -78,12 +117,10 @@
     </div>
   </div>
 
-  <div class="absolute top-0 right-0 my-2.5 w-8 me-2">
+  <div class="absolute top-0 right-0 my-2.5 w-8 me-3">
     <div class="relative inline-block text-left">
       <button
         on:click={(e) => toggleDropdown({ element: e })}
-        on:blur={() => toggleDropdown({ status: false })}
-        type="button"
         class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black dark:text-white shadow-sm focus:ring-0 focus:ring-offset-0"
         data-dropdown-toggle={`dropdown-menu-${item.id}`}
         aria-haspopup="true"
@@ -91,10 +128,8 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
           fill="currentColor"
-          class="bi bi-three-dots-vertical"
+          class="text-black min-w-5 w-5 min-h-5 h-5"
           viewBox="0 0 16 16"
         >
           <path
@@ -105,23 +140,35 @@
 
       <div
         id={`dropdown-menu-${item.id}`}
-        class="absolute hidden right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-gray-300 dark:bg-gray-700"
         role="menu"
+        on:blur={handleBlur}
+        class="absolute hidden right-0 z-10 mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white"
         aria-orientation="vertical"
         tabindex="-1"
       >
         <div class="py-1">
-          <span
-            class="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            role="menuitem">Open</span
+          {#if item.type === "directory"}
+            <button
+              class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
+              on:click={() => handleMenuClick("open")}>Open</button
+            >
+          {:else}
+            <button
+              class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
+              on:click={() => handleMenuClick("preview")}>Preview</button
+            >
+            <button
+              class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
+              on:click={() => handleMenuClick("download")}>Download</button
+            >
+          {/if}
+          <button
+            class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
+            on:click={() => handleMenuClick("rename")}>Rename</button
           >
-          <span
-            class="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            role="menuitem">Rename</span
-          >
-          <span
-            class="block px-4 py-2 text-sm cursor-pointer text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600"
-            role="menuitem">Delete</span
+          <button
+            class="block w-full text-left text-red-500 px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
+            on:click={() => handleMenuClick("delete")}>Delete</button
           >
         </div>
       </div>

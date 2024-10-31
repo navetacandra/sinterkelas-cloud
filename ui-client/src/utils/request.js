@@ -21,7 +21,8 @@ export function request(path, options) {
     try {
       const response = await fetch(path, { ...options, headers });
       if (!response.ok) {
-        reject({ status: response.status, message: response.statusText });
+        const json = await response.json();
+        reject(json);
       } else {
         resolve(response);
       }
