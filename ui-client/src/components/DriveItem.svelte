@@ -78,14 +78,14 @@
 </script>
 
 <div
-  class="relative"
+  class="relative group mb-3.5"
   on:contextmenu={itemContextMenu}
   on:dblclick={() => navigate(`/drive/${item.id}`)}
   role="button"
   tabindex="-1"
 >
   <div
-    class="w-full cursor-pointer py-3 rounded-lg mb-2.5 ps-4 pe-8 block border-2 border-black shadow-neo-sm"
+    class="w-full cursor-pointer py-3 rounded-lg ps-4 pe-8 block border-2 border-black shadow-neo-sm transition-all group-hover:shadow-none group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-gray-200"
     data-item-id={item.id}
   >
     <div class="flex text-black dark:text-white">
@@ -121,7 +121,7 @@
     <div class="relative inline-block text-left">
       <button
         on:click={(e) => toggleDropdown({ element: e })}
-        class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black dark:text-white shadow-sm focus:ring-0 focus:ring-offset-0"
+        class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black dark:text-white shadow-sm focus:ring-0 focus:ring-offset-0 transition-all duration-100 group-hover:translate-x-1 group-hover:translate-y-1"
         data-dropdown-toggle={`dropdown-menu-${item.id}`}
         aria-haspopup="true"
         aria-label="Options"

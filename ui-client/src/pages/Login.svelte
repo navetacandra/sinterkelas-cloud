@@ -79,10 +79,10 @@
           {/if}
           <button
             type="submit"
-            class={"w-full transition-all duration-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center border-2 border-black text-black shadow-neo-sm bg-darker-yellow" +
+            class={"w-full transition-all duration-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center border-2 border-black text-black bg-cyan" +
               (loading
-                ? " cursor-wait"
-                : " hover:bg-orange active:bg-orange focus:bg-orange hover:shadow-neo")}
+                ? " cursor-wait translate-x-1 translate-y-1 "
+                : " shadow-neo-sm active:bg-orange focus:bg-orange hover:shadow-none hover:translate-x-1 hover:translate-y-1")}
             >{loading ? "Loading..." : "Sign in"}</button
           >
           <p

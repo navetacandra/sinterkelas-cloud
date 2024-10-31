@@ -33,6 +33,9 @@
 
   $: {
     $location;
+    paths = [];
+    items = [];
+    loading = true;
     getDriveInfo();
   }
 </script>
