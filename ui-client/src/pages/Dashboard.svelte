@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { useLocation } from "svelte-routing";
   import { request } from "../utils/request.js";
+  import BottomUtilWidget from "../components/BottomUtilWidget.svelte";
   import DrivePath from "../components/DrivePath.svelte";
   import DriveItem from "../components/DriveItem.svelte";
   import DriveTitleSkeleton from "../components/skeleton/DriveTitle.svelte";
@@ -52,16 +53,15 @@
           >
         </p>
       </div>
-    {/if}
-    {#if !error}
+    {:else}
       <h1 class="text-3xl font-bold mb-2.5">Dashboard</h1>
       <DrivePath {paths} />
       {#each items as item}
         <DriveItem {item} />
       {/each}
+      <BottomUtilWidget />
     {/if}
-  {/if}
-  {#if loading}
+  {:else}
     <DriveTitleSkeleton />
     <DriveItemSkeleton />
     <DriveItemSkeleton />
