@@ -49,17 +49,18 @@
     <p class="text-black dark:text-white flex items-center">
       {#if i !== pathFront.length - 1}
         <Link
-          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline"
+          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline line-clamp-1 text-ellipsis overflow-hidden"
           to={!!path.name ? `/drive/${path.id}` : "/drive"}
           >{path.name || "Home"}
         </Link>
       {:else if pathBack.length < 1}
-        <span class="mx-1 cursor-default text-black font-semibold"
+        <span
+          class="mx-1 cursor-default text-black font-semibold line-clamp-1 text-ellipsis overflow-hidden"
           >{path.name || "Home"}</span
         >
       {:else}
         <Link
-          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline"
+          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline line-clamp-1 text-ellipsis overflow-hidden"
           to={!!path.name ? `/drive/${path.id}` : "/drive"}
           >{path.name || "Home"}
         </Link>
@@ -85,7 +86,7 @@
 
       <div
         id="dropdown-pathMid"
-        class="absolute hidden overflow-hidden mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white z-10 animate-scale-in"
+        class="absolute hidden overflow-hidden mt-2 w-48 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white z-10 animate-scale-in"
         aria-orientation="vertical"
         on:blur={handleBlur}
         tabindex="-1"
@@ -95,7 +96,9 @@
             class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
             on:click={() => handleMenuClick(path)}
           >
-            {path.name}
+            <span class="line-clamp-1 text-ellipsis">
+              {path.name}
+            </span>
           </button>
         {/each}
       </div>
@@ -107,12 +110,13 @@
       {@html chevronRight()}
       {#if i < pathBack.length - 1}
         <Link
-          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline"
+          class="mx-1 cursor-pointer text-blue-800 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-400 hover:underline line-clamp-1 text-ellipsis overflow-hidden"
           to={!!path.name ? `/drive/${path.id}` : "/drive"}
           >{path.name || "Home"}</Link
         >
       {:else}
-        <span class="mx-1 cursor-default text-black font-semibold"
+        <span
+          class="mx-1 cursor-default text-black font-semibold line-clamp-1 text-ellipsis overflow-hidden"
           >{path.name || "Home"}</span
         >
       {/if}

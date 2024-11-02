@@ -96,6 +96,7 @@
     xhr.open("POST", `/api/drive/upload?path=${encodeURIComponent(path)}`);
 
     xhr.upload.addEventListener("progress", (e) => updateProgress(id, e));
+    xhr.addEventListener("progress", (e) => updateProgress(id, e));
     xhr.addEventListener("load", ({ currentTarget: { status } }) =>
       updateStatus(id, status),
     );

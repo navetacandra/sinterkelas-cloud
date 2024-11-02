@@ -7,10 +7,10 @@
     state = val;
   });
 
-  function progressBar(progress, error = false) {
+  function progressBar(progress, error = false, done = false) {
     let transform = 100 - progress;
     return `<div class="w-full overflow-hidden border-2 border-black h-3 rounded-full transition-all duration-50">
-      <div class="bg-${error ? "darker-pink" : transform === 0 ? "green" : "cyan"} w-full h-full" style="transform: translateX(${transform * -1}%)"></div>
+      <div class="bg-${error ? "darker-pink" : done ? "green" : "cyan"} w-full h-full" style="transform: translateX(${transform * -1}%)"></div>
     </div>`;
   }
 </script>
@@ -43,7 +43,7 @@
     </button>
   </div>
   <div
-    class={"px-2 overflow-hidden bg-white transition-all duration-200 " +
+    class={"px-2 overflow-x-hidden bg-white transition-all duration-200 " +
       (open ? "py-2 h-56" : "h-0")}
   >
     {#each state as item}
@@ -63,7 +63,11 @@
           <p class="text-black line-clamp-1 text-ellipsis text-wrap">
             {item.name}
           </p>
-          {@html progressBar(item.progress, item.status == "error")}
+          {@html progressBar(
+            item.progress,
+            item.status == "error",
+            item.status == "uploaded",
+          )}
         </div>
       </div>
     {/each}

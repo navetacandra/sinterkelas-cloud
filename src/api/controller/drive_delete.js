@@ -67,7 +67,7 @@ exports.drive_delete = async function (req, res) {
     }
 
     const item_paths = medias.rows
-      .map((media) => media.full_path)
+      .map((media) => media.local_path)
       .filter((f) => f);
     const item_id = medias.rows.map((media) => media.item_id).filter((f) => f);
     const item_id_q = item_id.map((_, i) => `$${i + 1}`).join(", ");
