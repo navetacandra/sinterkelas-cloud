@@ -1,12 +1,29 @@
 <script>
+  import CreateDirectoryModal from "./CreateDirModal.svelte";
+  import UploadFileModal from "./UploadFileModal.svelte";
+  import UploadStatus from "./UploadStatus.svelte";
+  let showCreateDirectoryModal = false;
+  let showUploadModal = false;
   let open = false;
 
   function openMenu() {
     open = !open;
   }
 
-  function createDirectory() {
-    console.log("Create directory");
+  function openModalCreateDirectory() {
+    showCreateDirectoryModal = true;
+  }
+
+  function closeModalCreateDirectory() {
+    showCreateDirectoryModal = false;
+  }
+
+  function openModalUploadFile() {
+    showUploadModal = true;
+  }
+
+  function closeModalUploadFile() {
+    showUploadModal = false;
   }
 
   function uploadFiles() {
@@ -15,16 +32,18 @@
 
   $: {
     open = false;
+    showCreateDirectoryModal = false;
+    showUploadModal = false;
   }
 </script>
 
 <div class="fixed bottom-0 right-0 me-4 mb-4">
   <button
-    class={"block cursor-pointer p-1 rounded-lg border-2 border-black shadow-neo-sm transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
+    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
       (!open
-        ? " translate-y-10 opacity-0 scale-.5"
-        : " opacity-1 scale-1 -translate-y-8")}
-    on:click={createDirectory}
+        ? " translate-y-24 opacity-0 overflow-hidden translate-x-2"
+        : " opacity-1 -translate-y-8 p-1 border-2 border-black shadow-neo-sm")}
+    on:click={openModalCreateDirectory}
     aria-label="Create Directory"
   >
     <svg
@@ -42,11 +61,11 @@
   </button>
 
   <button
-    class={"block cursor-pointer p-1 rounded-lg border-2 border-black shadow-neo-sm transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
+    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
       (!open
-        ? " translate-y-10 opacity-0 scale-.5"
-        : " opacity-1 scale-1 -translate-y-4")}
-    on:click={uploadFiles}
+        ? " translate-y-10 opacity-0 overflow-hidden translate-x-2"
+        : " opacity-1 -translate-y-4 p-1 border-2 border-black shadow-neo-sm")}
+    on:click={openModalUploadFile}
     aria-label="Upload File"
   >
     <svg
@@ -88,3 +107,11 @@
     </svg>
   </button>
 </div>
+
+<UploadStatus />
+
+<CreateDirectoryModal
+  show={showCreateDirectoryModal}
+  close={closeModalCreateDirectory}
+/>
+<UploadFileModal show={showUploadModal} close={closeModalUploadFile} />

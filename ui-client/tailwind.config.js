@@ -4,6 +4,15 @@ export default {
   darkMode: "class", // Mengaktifkan mode gelap berbasis kelas
   theme: {
     extend: {
+      animation: {
+        "scale-in": "scaleIn 0.15s ease-out",
+      },
+      keyframes: {
+        scaleIn: {
+          "0%": { transform: "scale(0.4)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+      },
       boxShadow: {
         "neo-sm": "2px 4px 0px #000",
         neo: "4px 6px 0px #000",

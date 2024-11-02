@@ -1,5 +1,9 @@
 <script>
   import { navigate } from "svelte-routing";
+  import {
+    currentSelectedItem,
+    currentSelectedMenu,
+  } from "../states/currentDriveInfo.js";
   export let item;
 
   function getDropdownElement(id) {
@@ -14,7 +18,7 @@
     });
   }
 
-  function toggleDropdown({ element, status, posX, posY }) {
+  async function toggleDropdown({ element, status, posX, posY }) {
     const dropdown = getDropdownElement(item.id);
     const card = dropdown.closest(".relative");
     const { width, left, top } = card.getBoundingClientRect();
@@ -24,6 +28,7 @@
     const offsetTop = positionY - top;
 
     closeAllDropdowns();
+    await new Promise((resolve) => setTimeout(resolve, 10));
     if (status === false) return;
 
     if (dropdown) {
@@ -51,6 +56,7 @@
 
   function handleMenuClick(action) {
     closeAllDropdowns();
+    currentSelectedItem.set(item);
     switch (action) {
       case "open":
         navigate(`/drive/${item.id}`);
@@ -62,7 +68,7 @@
         console.log(`Handle download`);
         break;
       case "rename":
-        console.log(`Handle rename`);
+        currentSelectedMenu.set("rename");
         break;
       case "delete":
         console.log(`Handle delete`);
@@ -142,7 +148,7 @@
         id={`dropdown-menu-${item.id}`}
         role="menu"
         on:blur={handleBlur}
-        class="absolute hidden right-0 z-10 mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white"
+        class="absolute hidden right-0 z-10 mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white animate-scale-in"
         aria-orientation="vertical"
         tabindex="-1"
       >

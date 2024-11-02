@@ -85,7 +85,7 @@
 
       <div
         id="dropdown-pathMid"
-        class="absolute hidden overflow-hidden mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white z-10"
+        class="absolute hidden overflow-hidden mt-2 w-32 origin-top-right border-2 border-black shadow-neo-sm rounded-md bg-white z-10 animate-scale-in"
         aria-orientation="vertical"
         on:blur={handleBlur}
         tabindex="-1"

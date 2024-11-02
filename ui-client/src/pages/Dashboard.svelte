@@ -2,7 +2,9 @@
   import { onMount } from "svelte";
   import { useLocation } from "svelte-routing";
   import { request } from "../utils/request.js";
+  import { currentPath } from "../states/currentDriveInfo.js";
   import BottomUtilWidget from "../components/BottomUtilWidget.svelte";
+  import RenameItemModal from "../components/RenameItemModal.svelte";
   import DrivePath from "../components/DrivePath.svelte";
   import DriveItem from "../components/DriveItem.svelte";
   import DriveTitleSkeleton from "../components/skeleton/DriveTitle.svelte";
@@ -22,8 +24,18 @@
       });
       const json = await response.json();
       const { items: i, path: p } = json.data;
-      items = i;
-      paths = p;
+      items = i.sort((a, b) => {
+        // First, sort by type: directories should come before files
+        if (a.type === "directory" && b.type !== "directory") return -1;
+        if (a.type !== "directory" && b.type === "directory") return 1;
+
+        // If both are the same type, sort alphabetically by name
+        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+      });
+      paths = p.sort(
+        (a, b) => a.full_path.split("/").length - b.full_path.split("/").length,
+      );
+      currentPath.set(p.slice(-1)[0]);
     } catch (err) {
       console.error(err);
       error = true;
@@ -33,7 +45,6 @@
   }
 
   $: {
-    $location;
     paths = [];
     items = [];
     loading = true;
@@ -60,6 +71,7 @@
         <DriveItem {item} />
       {/each}
       <BottomUtilWidget />
+      <RenameItemModal />
     {/if}
   {:else}
     <DriveTitleSkeleton />
