@@ -1,24 +1,24 @@
 <script>
   import Modal from "../../templates/modal.svelte";
-  import { navigate } from "svelte-routing";
   import { request } from "../../utils/request.js";
+  import { getDriveInfo } from "../../utils/driveInfo.js";
   import {
     currentSelectedItem,
     currentSelectedMenu,
+    currentPath,
   } from "../../states/driveInfo.js";
   let show = false;
   let id = "";
+  let path = "";
   let name = "";
   let loading = false;
   let error = "";
 
+  currentSelectedMenu.subscribe((s) => (show = s === "delete"));
+  currentPath.subscribe((p) => (path = p.id));
   currentSelectedItem.subscribe((item) => {
     name = item.name;
     id = item.id;
-  });
-
-  currentSelectedMenu.subscribe((s) => {
-    show = s === "delete";
   });
 
   function openModal() {
@@ -46,7 +46,7 @@
       });
       closeModal();
       name = "";
-      navigate(window.location.pathname);
+      getDriveInfo(path);
     } catch (err) {
       console.error(err);
       error = err.message || err.toString();

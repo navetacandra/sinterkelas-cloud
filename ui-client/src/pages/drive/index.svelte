@@ -2,7 +2,8 @@
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
   import { request } from "../../utils/request.js";
-  import { currentPath } from "../../states/driveInfo.js";
+  import { getDriveInfo } from "../../utils/driveInfo.js";
+  import { currentPath, currentItems } from "../../states/driveInfo.js";
   import BottomWidget from "../../components/bottom_widget.svelte";
   import RenameModal from "../../components/modals/rename.svelte";
   import DeleteModal from "../../components/modals/delete.svelte";
@@ -17,39 +18,29 @@
   let paths = [];
   let items = [];
 
-  async function getDriveInfo() {
-    try {
-      const response = await request(`/api/drive/${id}`, {
-        method: "POST",
-      });
-      const json = await response.json();
-      const { items: i, path: p, current: c } = json.data;
-      if (c.type === "file") {
-        return navigate(`/file/${id}`);
-      }
-      items = i.sort((a, b) => {
-        if (a.type === "directory" && b.type !== "directory") return -1;
-        if (a.type !== "directory" && b.type === "directory") return 1;
+  currentItems.subscribe((value) => {
+    if (!value.current) return;
+    const { items: i, path: p, current: c } = value;
+    items = i.sort((a, b) => {
+      if (a.type === "directory" && b.type !== "directory") return -1;
+      if (a.type !== "directory" && b.type === "directory") return 1;
 
-        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-      });
-      paths = p.sort(
-        (a, b) => a.full_path.split("/").length - b.full_path.split("/").length,
-      );
-      currentPath.set(p.slice(-1)[0]);
-    } catch (err) {
-      console.error(err);
-      error = true;
-    } finally {
-      loading = false;
-    }
-  }
+      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+    });
+    paths = p.sort(
+      (a, b) => a.full_path.split("/").length - b.full_path.split("/").length,
+    );
+    currentPath.set(p.slice(-1)[0]);
+  });
 
   $: {
-    paths = [];
-    items = [];
-    loading = true;
-    getDriveInfo();
+    getDriveInfo(
+      id,
+      null,
+      () => navigate(`/file/${id}`),
+      () => (error = true),
+      () => (loading = false),
+    );
   }
 </script>
 

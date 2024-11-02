@@ -80,10 +80,12 @@ exports.drive_delete = async function (req, res) {
       `DELETE FROM cloud_items WHERE id IN (${item_id_q});`,
       item_id,
     );
-    await conn.query(
-      `DELETE FROM cloud_medias WHERE id IN (${media_id_q});`,
-      media_id,
-    );
+    if (media_id.length > 0) {
+      await conn.query(
+        `DELETE FROM cloud_medias WHERE id IN (${media_id_q});`,
+        media_id,
+      );
+    }
 
     for (const path of item_paths) {
       if (existsSync(path)) {

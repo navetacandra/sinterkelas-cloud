@@ -1,6 +1,7 @@
 <script>
   import Modal from "../../templates/modal.svelte";
   import { request } from "../../utils/request.js";
+  import { getDriveInfo } from "../../utils/driveInfo.js";
   import { currentPath, uploadState } from "../../states/driveInfo.js";
 
   export let show;
@@ -127,6 +128,7 @@
       );
       if (index !== -1)
         state[index].status = status === 200 ? "uploaded" : "error";
+      if (status === 200) getDriveInfo(driveId);
       return state;
     });
   }

@@ -1,7 +1,7 @@
 <script>
   import Modal from "../../templates/modal.svelte";
-  import { navigate } from "svelte-routing";
   import { request } from "../../utils/request.js";
+  import { getDriveInfo } from "../../utils/driveInfo.js";
   import { currentPath } from "../../states/driveInfo.js";
   export let show;
   export let close = () => {};
@@ -26,7 +26,7 @@
       });
       close();
       name = "";
-      navigate(window.location.pathname);
+      getDriveInfo(driveId);
     } catch (err) {
       console.error(err);
       error = err.message || err.toString();
