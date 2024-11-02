@@ -66,6 +66,11 @@ function loadPostgresClient(req, _, next) {
 }
 
 app.use("/api/", loadPostgresClient, require("./api/router").router);
+app.get(
+  "/download/:id",
+  loadPostgresClient,
+  require("./api/controller/drive_download").drive_download,
+);
 app.get("/*", (req, res) => {
   // Get request path
   let filepath = req.path.slice(1);

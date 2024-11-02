@@ -65,7 +65,7 @@
         console.log(`Handle preview`);
         break;
       case "download":
-        console.log(`Handle download`);
+        navigate(`/file/${item.id}`);
         break;
       case "rename":
         currentSelectedMenu.set("rename");
@@ -86,12 +86,13 @@
 <div
   class="relative group mb-3.5"
   on:contextmenu={itemContextMenu}
-  on:dblclick={() => navigate(`/drive/${item.id}`)}
+  on:dblclick={() =>
+    navigate(`/${item.type === "file" ? "file" : "drive"}/${item.id}`)}
   role="button"
   tabindex="-1"
 >
   <div
-    class="w-full cursor-pointer py-3 rounded-lg ps-4 pe-8 block border-2 border-black shadow-neo-sm transition-all group-hover:shadow-none group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-gray-200"
+    class="w-full cursor-pointer py-3 rounded-lg ps-4 pe-8 block bg-gray-100 border-2 border-black shadow-neo-sm transition-all group-hover:shadow-none group-hover:translate-x-1 group-hover:translate-y-1 group-hover:bg-gray-200"
     data-item-id={item.id}
   >
     <div class="flex text-black dark:text-white">

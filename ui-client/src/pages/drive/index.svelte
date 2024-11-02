@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { useLocation } from "svelte-routing";
+  import { navigate } from "svelte-routing";
   import { request } from "../../utils/request.js";
   import { currentPath } from "../../states/driveInfo.js";
   import BottomWidget from "../../components/bottom_widget.svelte";
@@ -12,7 +12,6 @@
   import DriveItemSkeleton from "../../components/drive/item/skeleton.svelte";
 
   export let id = "";
-  const location = useLocation();
   let loading = true;
   let error = false;
   let paths = [];
@@ -24,13 +23,14 @@
         method: "POST",
       });
       const json = await response.json();
-      const { items: i, path: p } = json.data;
+      const { items: i, path: p, current: c } = json.data;
+      if (c.type === "file") {
+        return navigate(`/file/${id}`);
+      }
       items = i.sort((a, b) => {
-        // First, sort by type: directories should come before files
         if (a.type === "directory" && b.type !== "directory") return -1;
         if (a.type !== "directory" && b.type === "directory") return 1;
 
-        // If both are the same type, sort alphabetically by name
         return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
       });
       paths = p.sort(
@@ -60,7 +60,7 @@
         <h1 class="text-3xl font-bold mb-2.5 text-center">Drive not found!</h1>
         <p class="text-center text-lg">
           Back to <a
-            href="/dashboard"
+            href="/drive"
             class="text-blue-700 hover:underline dark:text-dark-primary">home</a
           >
         </p>

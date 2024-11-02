@@ -7,6 +7,7 @@
   import LoginPage from "./pages/login.svelte";
   import LogoutPage from "./pages/logout.svelte";
   import DrivePage from "./pages/drive/index.svelte";
+  import FilePage from "./pages/file/index.svelte";
 
   onMount(() => {
     while (!window.db) {}
@@ -31,5 +32,8 @@
   </Route>
   <Route path="/drive/:id" let:params>
     <DrivePage id={params.id} />
+  </Route>
+  <Route path="/file/:id" let:params>
+    <FilePage id={params.id} />
   </Route>
 </Router>

@@ -1,3 +1,3 @@
 <div
-  class="w-full py-6 bg-black rounded animate-pulse bg-gray-300 dark:bg-gray-700 mb-2.5"
+  class="w-full h-12 rounded border-2 border-black animate-pulse bg-white mb-3.5"
 ></div>

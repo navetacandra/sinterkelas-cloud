@@ -42,7 +42,11 @@ exports.drive = async function (req, res) {
     // Return the full path and items in the response
     return res.status(200).json({
       status: "success",
-      data: { path: pQuery.rows, items: driveItems.rows },
+      data: {
+        current: current.rows[0],
+        path: pQuery.rows,
+        items: driveItems.rows,
+      },
     });
   } catch (error) {
     console.error(error);

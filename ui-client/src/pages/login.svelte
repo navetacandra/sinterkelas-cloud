@@ -26,7 +26,7 @@
 
 <section>
   <div
-    class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-[100dvh] md:h-screen lg:py-0"
+    class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-[100dvh] md:h-screen lg:py-0 bg-cyan"
   >
     <div
       class="w-full bg-white rounded-lg shadow-neo border-2 border-black sm:max-w-md xl:p-0"

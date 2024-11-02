@@ -39,7 +39,7 @@
 
 <div class="fixed bottom-0 right-0 me-4 mb-4">
   <button
-    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
+    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-orange hover:bg-darker-orange hover:shadow-none hover:translate-x-1" +
       (!open
         ? " translate-y-24 opacity-0 overflow-hidden translate-x-2"
         : " opacity-1 -translate-y-8 p-1 border-2 border-black shadow-neo-sm")}
@@ -61,7 +61,7 @@
   </button>
 
   <button
-    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
+    class={"block cursor-pointer rounded-lg transition-all duration-200 bg-pink hover:bg-darker-pink hover:shadow-none hover:translate-x-1" +
       (!open
         ? " translate-y-10 opacity-0 overflow-hidden translate-x-2"
         : " opacity-1 -translate-y-4 p-1 border-2 border-black shadow-neo-sm")}
@@ -87,8 +87,8 @@
   </button>
 
   <button
-    class={"z-[999] block relative cursor-pointer p-1 rounded-full border-2 border-black shadow-neo-sm bg-white transition-all duration-200 bg-white hover:bg-gray-200 hover:shadow-none hover:translate-x-1" +
-      (open ? "bg-gray-200 shadow-none translate-x-1" : "")}
+    class={"z-[999] block relative cursor-pointer p-1 rounded-full border-2 border-black shadow-neo-sm transition-all duration-200 bg-purple hover:bg-darker-purple hover:shadow-none hover:translate-x-1" +
+      (open ? "bg-darker-purple shadow-none translate-x-1" : "")}
     on:click={openMenu}
     aria-label="Menu"
   >
