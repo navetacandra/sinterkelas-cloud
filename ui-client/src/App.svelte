@@ -4,9 +4,9 @@
   import GuestShield from "./route/guest.svelte";
   import AuthShield from "./route/authenticated.svelte";
   import Render from "./route/render.svelte";
-  import LoginPage from "./pages/Login.svelte";
-  import LogoutPage from "./pages/Logout.svelte";
-  import DashboardPage from "./pages/Dashboard.svelte";
+  import LoginPage from "./pages/login.svelte";
+  import LogoutPage from "./pages/logout.svelte";
+  import DrivePage from "./pages/drive/index.svelte";
 
   onMount(() => {
     while (!window.db) {}
@@ -24,12 +24,12 @@
     <LogoutPage />
   </Route>
   <Route path="/dashboard">
-    <AuthShield component={DashboardPage} />
+    <AuthShield component={DrivePage} />
   </Route>
   <Route path="/drive">
-    <AuthShield component={DashboardPage} />
+    <AuthShield component={DrivePage} />
   </Route>
   <Route path="/drive/:id" let:params>
-    <DashboardPage id={params.id} />
+    <DrivePage id={params.id} />
   </Route>
 </Router>

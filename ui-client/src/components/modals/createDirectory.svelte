@@ -1,51 +1,30 @@
 <script>
-  import Modal from "./Modal.svelte";
+  import Modal from "../../templates/modal.svelte";
   import { navigate } from "svelte-routing";
-  import { request } from "../utils/request.js";
-  import {
-    currentSelectedItem,
-    currentSelectedMenu,
-  } from "../states/currentDriveInfo.js";
-  let show = false;
-  let id = "";
+  import { request } from "../../utils/request.js";
+  import { currentPath } from "../../states/driveInfo.js";
+  export let show;
+  export let close = () => {};
+  let driveId = "";
   let name = "";
   let nameInput;
   let loading = false;
   let error = "";
 
-  currentSelectedItem.subscribe((item) => {
-    name = item.name;
-    id = item.id;
-  });
+  currentPath.subscribe(({ id }) => (driveId = id));
 
-  currentSelectedMenu.subscribe((s) => {
-    show = s === "rename";
-  });
-
-  function openModal() {
-    show = true;
-    error = "";
-  }
-
-  function closeModal() {
-    show = false;
-    error = "";
-    currentSelectedItem.set({});
-    currentSelectedMenu.set("");
-  }
-
-  async function renameItem(e) {
+  async function createDirectory(e) {
     e.preventDefault();
     error = "";
     loading = true;
 
     try {
-      const result = await request(`/api/drive/rename`, {
+      const result = await request(`/api/drive/create-dir`, {
         headers: { "Content-Type": "application/json" },
         method: "POST",
-        body: JSON.stringify({ id, name }),
+        body: JSON.stringify({ driveId, name }),
       });
-      closeModal();
+      close();
       name = "";
       navigate(window.location.pathname);
     } catch (err) {
@@ -63,8 +42,8 @@
   }
 </script>
 
-<Modal {show} title="Rename" close={closeModal}>
-  <form action="#" method="POST" on:submit={renameItem}>
+<Modal {show} title="Create new directory" {close}>
+  <form action="#" method="POST" on:submit={createDirectory}>
     <div class="mb-4">
       <label for="name" class="block mb-2">Name</label>
       <input
@@ -84,9 +63,9 @@
           (loading
             ? ""
             : " shadow-neo-sm cursor-pointer hover:shadow-none hover:translate-x-1")}
-        aria-label="Rename"
+        aria-label="Create Directory"
       >
-        {loading ? "Renaming..." : "Rename"}
+        {loading ? "Creating..." : "Create"}
       </button>
     </div>
   </form>

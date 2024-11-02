@@ -1,14 +1,14 @@
 <script>
   import { onMount } from "svelte";
   import { useLocation } from "svelte-routing";
-  import { request } from "../utils/request.js";
-  import { currentPath } from "../states/currentDriveInfo.js";
-  import BottomUtilWidget from "../components/BottomUtilWidget.svelte";
-  import RenameItemModal from "../components/RenameItemModal.svelte";
-  import DrivePath from "../components/DrivePath.svelte";
-  import DriveItem from "../components/DriveItem.svelte";
-  import DriveTitleSkeleton from "../components/skeleton/DriveTitle.svelte";
-  import DriveItemSkeleton from "../components/skeleton/DriveItem.svelte";
+  import { request } from "../../utils/request.js";
+  import { currentPath } from "../../states/driveInfo.js";
+  import BottomWidget from "../../components/bottom_widget.svelte";
+  import RenameModal from "../../components/modals/rename.svelte";
+  import DrivePath from "../../components/drive/path/index.svelte";
+  import DriveItem from "../../components/drive/item/index.svelte";
+  import DriveTitleSkeleton from "../../components/drive/path/skeleton.svelte";
+  import DriveItemSkeleton from "../../components/drive/item/skeleton.svelte";
 
   export let id = "";
   const location = useLocation();
@@ -52,7 +52,7 @@
   }
 </script>
 
-<div class="px-4 md:px-32 xl:px-64 py-8 mt-5 text-black dark:text-white">
+<div class="px-4 md:px-32 xl:px-64 py-12 mt-5 text-black dark:text-white">
   {#if !loading}
     {#if error}
       <div class="shadow-neo rounded-lg border-2 border-black p-6">
@@ -65,13 +65,12 @@
         </p>
       </div>
     {:else}
-      <h1 class="text-3xl font-bold mb-2.5">Dashboard</h1>
       <DrivePath {paths} />
       {#each items as item}
         <DriveItem {item} />
       {/each}
-      <BottomUtilWidget />
-      <RenameItemModal />
+      <BottomWidget />
+      <RenameModal />
     {/if}
   {:else}
     <DriveTitleSkeleton />

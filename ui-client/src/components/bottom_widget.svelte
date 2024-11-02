@@ -1,7 +1,7 @@
 <script>
-  import CreateDirectoryModal from "./CreateDirModal.svelte";
-  import UploadFileModal from "./UploadFileModal.svelte";
-  import UploadStatus from "./UploadStatus.svelte";
+  import CreateDirectoryModal from "./modals/createDirectory.svelte";
+  import UploadFileModal from "./modals/upload.svelte";
+  import UploadStatus from "./upload_status.svelte";
   let showCreateDirectoryModal = false;
   let showUploadModal = false;
   let open = false;

@@ -3,7 +3,7 @@
   import {
     currentSelectedItem,
     currentSelectedMenu,
-  } from "../states/currentDriveInfo.js";
+  } from "../../../states/driveInfo.js";
   export let item;
 
   function getDropdownElement(id) {

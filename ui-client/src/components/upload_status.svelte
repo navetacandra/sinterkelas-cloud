@@ -1,5 +1,5 @@
 <script>
-  import { uploadState } from "../states/currentDriveInfo.js";
+  import { uploadState } from "../states/driveInfo.js";
   let open = true;
   let state = [];
 
@@ -52,7 +52,7 @@
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 384 512"
           fill="currentColor"
-          class="min-w-7 w-7 min-h-7 h-7 mr-3 text-black"
+          class="min-w-7 w-7 min-h-7 h-7 text-black"
         >
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path

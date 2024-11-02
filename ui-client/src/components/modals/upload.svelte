@@ -1,7 +1,7 @@
 <script>
-  import Modal from "./Modal.svelte";
-  import { request } from "../utils/request.js";
-  import { currentPath, uploadState } from "../states/currentDriveInfo.js";
+  import Modal from "../../templates/modal.svelte";
+  import { request } from "../../utils/request.js";
+  import { currentPath, uploadState } from "../../states/driveInfo.js";
 
   export let show;
   export let close = () => {};

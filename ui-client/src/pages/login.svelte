@@ -15,7 +15,7 @@
     try {
       const token = await login({ username, password });
       await window.db.addData("user", { key: "token", value: token });
-      navigate("/dashboard");
+      navigate("/drive");
     } catch (err) {
       error = err.message ?? err.toString();
     } finally {
