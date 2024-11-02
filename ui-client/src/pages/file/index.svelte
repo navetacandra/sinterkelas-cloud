@@ -87,7 +87,6 @@
       <p class="w-full h-6 mb-5 mt-4 text-lg">{info.name}</p>
       <div class="mb-4 w-full">
         <p class="w-full"><b>Size</b>: {calculateSize(info.size)}</p>
-        <p class="w-full"><b>Type</b>: {info.type}</p>
         <p class="w-full"><b>Uploaded at</b>: {info.uploaded_at}</p>
       </div>
       <button

@@ -1,4 +1,28 @@
-const { unlinkSync, existsSync } = require("fs");
+const {
+  unlinkSync,
+  existsSync,
+  createReadStream,
+  createWriteStream,
+} = require("fs");
+const { createGzip } = require("zlib");
+
+function fileCompression(filepath = "") {
+  const outpath = `${filepath}.gz`;
+  const file = createReadStream(filepath);
+  const output = createWriteStream(outpath);
+  const gzip = createGzip({ level: 9 });
+
+  return new Promise((resolve, reject) => {
+    file
+      .pipe(gzip)
+      .pipe(output)
+      .on("error", reject)
+      .on("finish", () => {
+        resolve(outpath);
+        removeFile(filepath);
+      });
+  });
+}
 
 function removeFile(filepath = "") {
   if (existsSync(filepath)) {
@@ -71,6 +95,16 @@ exports.drive_upload = async (req, res) => {
         .json({ status: "error", message: "File already exists." });
     }
 
+    const compressed = await fileCompression(filepath);
+    if (!compressed) {
+      removeFile(filepath);
+      removeFile(compressed);
+      await conn.query("ROLLBACK");
+      return res
+        .status(500)
+        .json({ status: "error", message: "File upload failed." });
+    }
+
     // Insert the new file into cloud_items
     const insertResult = await conn.query(
       `INSERT INTO cloud_items (user_id, name, path, type) 
@@ -90,7 +124,7 @@ exports.drive_upload = async (req, res) => {
     await conn.query(
       `INSERT INTO cloud_medias (local_path, item_id) 
        VALUES ($1, $2);`,
-      [filepath, insertResult.rows[0].id],
+      [compressed, insertResult.rows[0].id],
     );
 
     // Commit transaction

@@ -1,4 +1,11 @@
-const { statSync, existsSync } = require("fs");
+const { statSync, existsSync, createReadStream } = require("fs");
+const { createGunzip } = require("zlib");
+
+function sendGunziped(res, path) {
+  const stream = createReadStream(path);
+  const gunzip = createGunzip();
+  stream.pipe(gunzip).pipe(res);
+}
 
 exports.drive_download = async function (req, res) {
   /** @type {import('pg').Client} */
@@ -56,13 +63,21 @@ exports.drive_download = async function (req, res) {
 
     const { fileTypeFromFile } = await import("file-type");
     const stats = statSync(local_path);
-    const type = await fileTypeFromFile(local_path);
 
-    res.setHeader("Content-Type", type.mime || "application/octet-stream");
-    res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
-    res.setHeader("Content-Length", stats.size);
+    const acceptGzip = (req.headers["accept-encoding"] || "").includes("gzip");
+    if (acceptGzip) {
+      const type = await fileTypeFromFile(local_path);
+      res.setHeader("Content-Type", type.mime || "application/octet-stream");
+      res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
+      res.setHeader("Content-Length", stats.size);
 
-    return res.sendFile(local_path);
+      return res.sendFile(local_path);
+    } else {
+      res.setHeader("Content-Type", "application/octet-stream");
+      res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
+
+      sendGunziped(res, local_path);
+    }
   } catch (error) {
     console.error(error);
     return res
