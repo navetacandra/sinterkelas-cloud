@@ -6,10 +6,7 @@
 
   // Listen to the store to get active toasts
   let _toasts = new Map();
-  const unsubscribe = toasts.subscribe((value) => {
-    _toasts = value;
-    console.log(value);
-  });
+  const unsubscribe = toasts.subscribe((value) => (_toasts = value));
 </script>
 
 <div

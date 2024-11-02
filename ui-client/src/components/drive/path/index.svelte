@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="text-xl flex mb-8">
+<div class="text-xl flex mb-8 border-b-2 border-black pb-3">
   {#each pathFront as path, i}
     <p class="text-black dark:text-white flex items-center">
       {#if i !== pathFront.length - 1}
