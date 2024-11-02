@@ -95,6 +95,9 @@ exports.drive_upload = async (req, res) => {
         .json({ status: "error", message: "File already exists." });
     }
 
+    const { fileTypeFromFile } = await import("file-type");
+    const type = await fileTypeFromFile(filepath);
+
     const compressed = await fileCompression(filepath);
     if (!compressed) {
       removeFile(filepath);
@@ -122,9 +125,13 @@ exports.drive_upload = async (req, res) => {
 
     // Link the file path in cloud_medias
     await conn.query(
-      `INSERT INTO cloud_medias (local_path, item_id) 
-       VALUES ($1, $2);`,
-      [compressed, insertResult.rows[0].id],
+      `INSERT INTO cloud_medias (local_path, mime_type, item_id) 
+       VALUES ($1, $2, $3);`,
+      [
+        compressed,
+        type?.mime || "application/octet-stream",
+        insertResult.rows[0].id,
+      ],
     );
 
     // Commit transaction

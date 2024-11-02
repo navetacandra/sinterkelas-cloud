@@ -41,7 +41,7 @@ exports.drive_download = async function (req, res) {
         .json({ status: "error", message: "Item not found" });
     }
 
-    const { local_path, public, name } = media.rows[0];
+    const { local_path, public, name, mime_type } = media.rows[0];
     if (!existsSync(local_path)) {
       return res
         .status(404)
@@ -65,18 +65,17 @@ exports.drive_download = async function (req, res) {
     const stats = statSync(local_path);
 
     const acceptGzip = (req.headers["accept-encoding"] || "").includes("gzip");
-    if (acceptGzip) {
+    if (!acceptGzip || mime_type === "application/octet-stream") {
+      res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
+
+      sendGunziped(res, local_path);
+    } else {
       const type = await fileTypeFromFile(local_path);
       res.setHeader("Content-Type", type.mime || "application/octet-stream");
       res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
       res.setHeader("Content-Length", stats.size);
 
       return res.sendFile(local_path);
-    } else {
-      res.setHeader("Content-Type", "application/octet-stream");
-      res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
-
-      sendGunziped(res, local_path);
     }
   } catch (error) {
     console.error(error);
