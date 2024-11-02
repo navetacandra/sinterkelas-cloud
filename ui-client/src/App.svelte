@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { Router, Route, Link } from "svelte-routing";
+  import ProfileWidget from "./components/profile_widget.svelte";
   import Toast from "./components/toast/index.svelte";
   import GuestShield from "./route/guest.svelte";
   import AuthShield from "./route/authenticated.svelte";
@@ -16,6 +17,9 @@
 </script>
 
 <Router>
+  <ProfileWidget />
+  <Toast />
+
   <Route path="/">
     <h1 class="text-3xl font-bold">Hello World from Tailwind!</h1>
   </Route>
@@ -24,9 +28,6 @@
   </Route>
   <Route path="/logout">
     <LogoutPage />
-  </Route>
-  <Route path="/dashboard">
-    <AuthShield component={DrivePage} />
   </Route>
   <Route path="/drive">
     <AuthShield component={DrivePage} />
@@ -38,4 +39,3 @@
     <FilePage id={params.id} />
   </Route>
 </Router>
-<Toast />

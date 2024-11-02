@@ -61,9 +61,6 @@
       case "open":
         navigate(`/drive/${item.id}`);
         break;
-      case "preview":
-        console.log(`Handle preview`);
-        break;
       case "download":
         navigate(`/file/${item.id}`);
         break;
@@ -160,10 +157,6 @@
               on:click={() => handleMenuClick("open")}>Open</button
             >
           {:else}
-            <button
-              class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
-              on:click={() => handleMenuClick("preview")}>Preview</button
-            >
             <button
               class="block w-full text-left px-4 py-2 text-sm cursor-pointer text-black hover:bg-gray-200 border-b-2 last:border-none border-black"
               on:click={() => handleMenuClick("download")}>Download</button
