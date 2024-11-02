@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { Router, Route, Link } from "svelte-routing";
+  import Toast from "./components/toast/index.svelte";
   import GuestShield from "./route/guest.svelte";
   import AuthShield from "./route/authenticated.svelte";
   import Render from "./route/render.svelte";
@@ -37,3 +38,4 @@
     <FilePage id={params.id} />
   </Route>
 </Router>
+<Toast />

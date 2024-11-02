@@ -1,6 +1,7 @@
 <script>
   import Modal from "../../templates/modal.svelte";
   import { request } from "../../utils/request.js";
+  import { addToast } from "../../utils/toast.js";
   import { getDriveInfo } from "../../utils/driveInfo.js";
   import { currentPath } from "../../states/driveInfo.js";
   export let show;
@@ -25,6 +26,7 @@
         body: JSON.stringify({ driveId, name }),
       });
       close();
+      addToast("Directory created successfully!", 2000, "green");
       name = "";
       getDriveInfo(driveId);
     } catch (err) {

@@ -1,6 +1,7 @@
 <script>
   import Modal from "../../templates/modal.svelte";
   import { request } from "../../utils/request.js";
+  import { addToast } from "../../utils/toast.js";
   import { getDriveInfo } from "../../utils/driveInfo.js";
   import {
     currentSelectedItem,
@@ -29,7 +30,6 @@
   function closeModal() {
     show = false;
     error = "";
-    currentSelectedItem.set({});
     currentSelectedMenu.set("");
   }
 
@@ -45,6 +45,8 @@
         body: JSON.stringify({ id }),
       });
       closeModal();
+      addToast(`<b>${name}</b> deleted successfully!`, 2000, "green");
+      currentSelectedItem.set({});
       name = "";
       getDriveInfo(path);
     } catch (err) {

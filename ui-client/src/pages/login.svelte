@@ -1,23 +1,26 @@
 <script>
   import { navigate } from "svelte-routing";
   import { login } from "../utils/user.js";
+  import { addToast } from "../utils/toast.js";
   let loading = false,
     username = "",
-    password = "",
-    error = "";
+    password = "";
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (loading) return;
     loading = true;
-    error = "";
 
     try {
       const token = await login({ username, password });
       await window.db.addData("user", { key: "token", value: token });
       navigate("/drive");
     } catch (err) {
-      error = err.message ?? err.toString();
+      addToast(
+        `<small>${err.message ?? err.toString()}</small>`,
+        2000,
+        "orange",
+      );
     } finally {
       loading = false;
     }
@@ -74,9 +77,6 @@
               required=""
             />
           </div>
-          {#if error.length > 0}
-            <small class="text-red-500">{error}</small>
-          {/if}
           <button
             type="submit"
             class={"w-full transition-all duration-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center border-2 border-black text-black bg-cyan" +

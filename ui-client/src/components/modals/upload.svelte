@@ -1,6 +1,7 @@
 <script>
   import Modal from "../../templates/modal.svelte";
   import { request } from "../../utils/request.js";
+  import { addToast } from "../../utils/toast.js";
   import { getDriveInfo } from "../../utils/driveInfo.js";
   import { currentPath, uploadState } from "../../states/driveInfo.js";
 
@@ -106,7 +107,7 @@
 
   function addUploadState(id, name) {
     uploadState.update((state) => [
-      ...state.filter((s) => s.status !== "uploaded"),
+      ...state.filter((s) => s.status === "uploading"),
       { id, name, progress: 0, status: "uploading" },
     ]);
   }
@@ -129,7 +130,12 @@
       );
       if (index !== -1)
         state[index].status = status === 200 ? "uploaded" : "error";
-      if (status === 200) getDriveInfo(driveId);
+      if (status === 200) {
+        addToast(`<b>${state[index].name}</b> upload finished!`, 2000, "green");
+        getDriveInfo(driveId);
+      } else {
+        addToast(`<b>${state[index].name}</b> upload failed!`, 2000, "orange");
+      }
       return state;
     });
   }
