@@ -11,6 +11,7 @@ const path = require("path");
 const { drive_prepare_upload } = require("./controller/drive_prepare-upload");
 const { drive_upload } = require("./controller/drive_upload");
 const { drive_rename } = require("./controller/drive_rename");
+const { drive_delete } = require("./controller/drive_delete");
 
 const multerStorage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -46,6 +47,7 @@ exports.router.post(
   drive_upload,
 );
 exports.router.post("/drive/rename", authenticated, drive_rename);
+exports.router.post("/drive/delete", authenticated, drive_delete);
 exports.router.post("/drive/:driveId", authenticated, drive);
 
 exports.router.all("/*", (_, res) => {

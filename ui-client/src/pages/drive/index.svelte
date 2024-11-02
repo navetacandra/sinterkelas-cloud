@@ -5,6 +5,7 @@
   import { currentPath } from "../../states/driveInfo.js";
   import BottomWidget from "../../components/bottom_widget.svelte";
   import RenameModal from "../../components/modals/rename.svelte";
+  import DeleteModal from "../../components/modals/delete.svelte";
   import DrivePath from "../../components/drive/path/index.svelte";
   import DriveItem from "../../components/drive/item/index.svelte";
   import DriveTitleSkeleton from "../../components/drive/path/skeleton.svelte";
@@ -71,6 +72,7 @@
       {/each}
       <BottomWidget />
       <RenameModal />
+      <DeleteModal />
     {/if}
   {:else}
     <DriveTitleSkeleton />

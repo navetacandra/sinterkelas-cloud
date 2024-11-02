@@ -71,7 +71,7 @@
         currentSelectedMenu.set("rename");
         break;
       case "delete":
-        console.log(`Handle delete`);
+        currentSelectedMenu.set("delete");
         break;
       default:
         break;

@@ -4,6 +4,10 @@ exports.drive_rename = async function (req, res) {
   const { id, name } = req.body;
   const token = req.headers["x-access-token"] || req.cookies["token"];
 
+  if (!id) {
+    return res.status(400).json({ status: "error", message: "id is required" });
+  }
+
   if (!name) {
     return res
       .status(400)
