@@ -71,7 +71,11 @@ exports.drive_download = async function (req, res) {
       sendGunziped(res, local_path);
     } else {
       const type = await fileTypeFromFile(local_path);
-      res.setHeader("Content-Type", type.mime || "application/octet-stream");
+      res.setHeader("Content-Encoding", "gzip");
+      res.setHeader(
+        "Content-Type",
+        mime_type || type.mime || "application/octet-stream",
+      );
       res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
       res.setHeader("Content-Length", stats.size);
 

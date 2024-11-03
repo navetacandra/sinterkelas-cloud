@@ -48,7 +48,7 @@
   {#if !loading}
     {#if error}
       <div class="shadow-neo rounded-lg border-2 border-black p-6">
-        <h1 class="text-3xl font-bold mb-2.5 text-center">Drive not found!</h1>
+        <h1 class="text-3xl font-bold mb-2.5 text-center">{error}!</h1>
         <p class="text-center text-lg">
           Back to <a
             href="/drive"
