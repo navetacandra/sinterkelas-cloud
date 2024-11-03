@@ -6,6 +6,7 @@
   import GuestShield from "./route/guest.svelte";
   import AuthShield from "./route/authenticated.svelte";
   import Render from "./route/render.svelte";
+  import HomePage from "./pages/home.svelte";
   import LoginPage from "./pages/login.svelte";
   import LogoutPage from "./pages/logout.svelte";
   import DrivePage from "./pages/drive/index.svelte";
@@ -21,7 +22,7 @@
   <Toast />
 
   <Route path="/">
-    <h1 class="text-3xl font-bold">Hello World from Tailwind!</h1>
+    <HomePage />
   </Route>
   <Route path="/login">
     <GuestShield component={LoginPage} />

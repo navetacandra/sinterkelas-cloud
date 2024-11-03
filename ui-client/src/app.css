@@ -1,3 +1,119 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* IBM Plex Mono - Regular */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - Bold */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Bold Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - Extra Light */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Extra Light Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-ExtraLightItalic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - Light */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Light Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - Medium */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Medium Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - SemiBold */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - SemiBold Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-SemiBoldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* IBM Plex Mono - Thin */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* IBM Plex Mono - Thin Italic */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("fonts/IBMPlexMono-ThinItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+body {
+  font-family: "IBMPlexMono", monospace;
+}

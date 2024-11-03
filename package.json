@@ -10,7 +10,7 @@
     "start.build": "BUILD_UI=true node ./src/index.js"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,svelte,json,css,html,svg,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,svelte,json,css,html,md}": "prettier --write"
   },
   "repository": {
     "type": "git",
